@@ -1,0 +1,20 @@
+
+try
+{
+  String genericKey = vars.get("genericKey");
+  String filterKey = "Filter_" + genericKey;
+  String value = vars.get(filterKey);
+  int max = Integer.parseInt(vars.get(filterKey + "_matchNr"));
+  // always have 1 value, but use up to 10% (rounded up) of possible values
+  for(int index=2; index <= (max / 10); index++)
+  {
+    value = value + "$" + vars.get(filterKey + "_" + index);
+  }
+  vars.put("paramValue", value);
+  log.info("paramValue=" + value);
+}
+catch (Exception ex)
+{
+  log.warn("Error in my script\n", ex);
+  throw ex; // otherwise JMeter will "swallow" the above exception
+}
