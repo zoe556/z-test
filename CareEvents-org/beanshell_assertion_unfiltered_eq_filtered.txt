@@ -1,0 +1,42 @@
+
+try
+{
+  // get number of bins of each set of counts
+  int unfilteredCount = Integer.parseInt(vars.get("unfilteredCount_matchNr"));
+  int filteredCount = Integer.parseInt(vars.get("filteredCount_matchNr"));
+  String paramName = vars.get("paramName");
+  if(unfilteredCount != filteredCount)
+  {
+    Failure = true;
+    FailureMessage = "With filter '" + paramName + "', " + filteredCount + " bins returned compared to " + unfilteredCount + " bins unfiltered";
+    log.warn(FailureMessage);
+  }
+  else
+  {
+    for(int index=1; index <= unfilteredCount; index++)
+    {
+      int unfiltered = Integer.parseInt(vars.get("unfilteredCount_" + index));
+      int filtered = Integer.parseInt(vars.get("filteredCount_" + index));
+      if(unfiltered == filtered)
+      {
+        // log.info("Bin " + index + " passed: unfiltered==filtered: " + unfiltered + "==" + filtered);
+      }
+      else
+      {
+        Failure = true;
+        if(FailureMessage.isEmpty())
+        {
+          FailureMessage = "Expected unfiltered == filtered";
+        }
+        String message = "Bin " + index + " failed: " + unfiltered + "!=" + filtered;
+        FailureMessage = FailureMessage + "\n" + message;
+        // log.warn(message);
+      }
+    }
+  }
+}
+catch (Exception ex)
+{
+  log.warn("Error in my script\n", ex);
+  throw ex; // otherwise JMeter will "swallow" the above exception
+}
